@@ -54,37 +54,38 @@ async function fetchWeather(latitude, longitude) {
     };
 }
 
-// Mapea los códigos del clima Open-Meteo a iconos y descripción
+// Mapea los códigos del clima Open-Meteo a iconos, descripción y fondo
 const weatherCodeMap = {
-    0: { icon: '☀️', desc: 'Despejado' },
-    1: { icon: '🌤️', desc: 'Parcialmente nublado' },
-    2: { icon: '⛅', desc: 'Nublado' },
-    3: { icon: '☁️', desc: 'Muy nublado' },
-    45: { icon: '🌫️', desc: 'Niebla' },
-    48: { icon: '🌫️', desc: 'Niebla helada' },
-    51: { icon: '🌦️', desc: 'Llovizna ligera' },
-    53: { icon: '🌦️', desc: 'Llovizna moderada' },
-    55: { icon: '🌧️', desc: 'Llovizna densa' },
-    56: { icon: '🌧️', desc: 'Llovizna helada ligera' },
-    57: { icon: '🌧️', desc: 'Llovizna helada densa' },
-    61: { icon: '🌧️', desc: 'Lluvia ligera' },
-    63: { icon: '🌧️', desc: 'Lluvia moderada' },
-    65: { icon: '🌧️', desc: 'Lluvia fuerte' },
-    66: { icon: '🌧️', desc: 'Lluvia helada ligera' },
-    67: { icon: '🌧️', desc: 'Lluvia helada fuerte' },
-    71: { icon: '❄️', desc: 'Nieve ligera' },
-    73: { icon: '❄️', desc: 'Nieve moderada' },
-    75: { icon: '❄️', desc: 'Nieve fuerte' },
-    77: { icon: '❄️', desc: 'Copos de nieve' },
-    80: { icon: '🌧️', desc: 'Chubascos ligeros' },
-    81: { icon: '🌧️', desc: 'Chubascos moderados' },
-    82: { icon: '🌧️', desc: 'Chubascos violentos' },
-    85: { icon: '❄️', desc: 'Chubascos de nieve ligeros' },
-    86: { icon: '❄️', desc: 'Chubascos de nieve fuertes' },
-    95: { icon: '⛈️', desc: 'Tormenta' },
-    96: { icon: '⛈️', desc: 'Tormenta con granizo ligera' },
-    99: { icon: '⛈️', desc: 'Tormenta con granizo fuerte' },
+    0: { icon: '☀️', desc: 'Despejado', bg: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)' },
+    1: { icon: '🌤️', desc: 'Parcialmente nublado', bg: 'linear-gradient(135deg, #FFE4B5 0%, #DEB887 100%)' },
+    2: { icon: '⛅', desc: 'Nublado', bg: 'linear-gradient(135deg, #D3D3D3 0%, #A9A9A9 100%)' },
+    3: { icon: '☁️', desc: 'Muy nublado', bg: 'linear-gradient(135deg, #696969 0%, #2F4F4F 100%)' },
+    45: { icon: '🌫️', desc: 'Niebla', bg: 'linear-gradient(135deg, #F5F5F5 0%, #DCDCDC 100%)' },
+    48: { icon: '🌫️', desc: 'Niebla helada', bg: 'linear-gradient(135deg, #E0FFFF 0%, #B0E0E6 100%)' },
+    51: { icon: '🌦️', desc: 'Llovizna ligera', bg: 'linear-gradient(135deg, #87CEEB 0%, #4682B4 100%)' },
+    53: { icon: '🌦️', desc: 'Llovizna moderada', bg: 'linear-gradient(135deg, #6495ED 0%, #4169E1 100%)' },
+    55: { icon: '🌧️', desc: 'Llovizna densa', bg: 'linear-gradient(135deg, #0000CD 0%, #000080 100%)' },
+    56: { icon: '🌧️', desc: 'Llovizna helada ligera', bg: 'linear-gradient(135deg, #ADD8E6 0%, #87CEFA 100%)' },
+    57: { icon: '🌧️', desc: 'Llovizna helada densa', bg: 'linear-gradient(135deg, #00BFFF 0%, #1E90FF 100%)' },
+    61: { icon: '🌧️', desc: 'Lluvia ligera', bg: 'linear-gradient(135deg, #32CD32 0%, #228B22 100%)' },
+    63: { icon: '🌧️', desc: 'Lluvia moderada', bg: 'linear-gradient(135deg, #006400 0%, #004400 100%)' },
+    65: { icon: '🌧️', desc: 'Lluvia fuerte', bg: 'linear-gradient(135deg, #2F4F4F 0%, #191970 100%)' },
+    66: { icon: '🌧️', desc: 'Lluvia helada ligera', bg: 'linear-gradient(135deg, #98FB98 0%, #00FF7F 100%)' },
+    67: { icon: '🌧️', desc: 'Lluvia helada fuerte', bg: 'linear-gradient(135deg, #00FA9A 0%, #008B8B 100%)' },
+    71: { icon: '❄️', desc: 'Nieve ligera', bg: 'linear-gradient(135deg, #F0F8FF 0%, #E6E6FA 100%)' },
+    73: { icon: '❄️', desc: 'Nieve moderada', bg: 'linear-gradient(135deg, #DDA0DD 0%, #BA55D3 100%)' },
+    75: { icon: '❄️', desc: 'Nieve fuerte', bg: 'linear-gradient(135deg, #9370DB 0%, #8A2BE2 100%)' },
+    77: { icon: '❄️', desc: 'Copos de nieve', bg: 'linear-gradient(135deg, #FFFACD 0%, #F0E68C 100%)' },
+    80: { icon: '🌧️', desc: 'Chubascos ligeros', bg: 'linear-gradient(135deg, #20B2AA 0%, #008080 100%)' },
+    81: { icon: '🌧️', desc: 'Chubascos moderados', bg: 'linear-gradient(135deg, #48D1CC 0%, #40E0D0 100%)' },
+    82: { icon: '🌧️', desc: 'Chubascos violentos', bg: 'linear-gradient(135deg, #00CED1 0%, #5F9EA0 100%)' },
+    85: { icon: '❄️', desc: 'Chubascos de nieve ligeros', bg: 'linear-gradient(135deg, #AFEEEE 0%, #7FFFD4 100%)' },
+    86: { icon: '❄️', desc: 'Chubascos de nieve fuertes', bg: 'linear-gradient(135deg, #40E0D0 0%, #00CED1 100%)' },
+    95: { icon: '⛈️', desc: 'Tormenta', bg: 'linear-gradient(135deg, #2F2F2F 0%, #000000 100%)' },
+    96: { icon: '⛈️', desc: 'Tormenta con granizo ligera', bg: 'linear-gradient(135deg, #696969 0%, #A9A9A9 100%)' },
+    99: { icon: '⛈️', desc: 'Tormenta con granizo fuerte', bg: 'linear-gradient(135deg, #808080 0%, #C0C0C0 100%)' },
 };
+
 
 const cityInput = document.getElementById('city-input');
 const searchButton = document.getElementById('search-button');
@@ -106,7 +107,13 @@ function showLoading(show) {
     loadingSpinner.classList.toggle('hidden', !show);
 }
 
-function displayWeather(cityName, temp, icon, desc) {
+function displayWeather(cityName, temp, icon, desc, weatherCode) {
+    const weatherInfo = weatherCodeMap[weatherCode] || { bg: 'linear-gradient(135deg, #1f2937 0%, #0f172a 100%)' };
+    document.body.classList.add('changing');
+    setTimeout(() => {
+        document.body.style.background = weatherInfo.bg;
+        document.body.classList.remove('changing');
+    }, 500);
     weatherResult.innerHTML = `
         <div class="mt-4 animate-fadeIn">
             <div class="text-8xl mb-4 transition duration-500 transform hover:rotate-3">${icon}</div>
@@ -136,7 +143,7 @@ async function handleSearch() {
             desc: 'Desconocido',
         };
 
-        displayWeather(`${coords.name}, ${coords.country}`, weather.temp, weatherInfo.icon, weatherInfo.desc);
+        displayWeather(`${coords.name}, ${coords.country}`, weather.temp, weatherInfo.icon, weatherInfo.desc, weather.weatherCode);
     } catch (err) {
         showError(err.message || 'Error al obtener el clima.');
     } finally {

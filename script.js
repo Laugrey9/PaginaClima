@@ -107,12 +107,87 @@ function showLoading(show) {
     loadingSpinner.classList.toggle('hidden', !show);
 }
 
+function updateLandscapeColor(weatherCode) {
+    const landscape = document.getElementById('landscape');
+    let baseColor;
+
+    if ([0, 1].includes(weatherCode)) {
+        // Sunny - warmer, more vibrant green
+        baseColor = 'rgba(50, 205, 50, 0.7)'; // Lime green
+    } else if ([2, 3, 45, 48].includes(weatherCode)) {
+        // Cloudy/Fog - neutral green
+        baseColor = 'rgba(34, 139, 34, 0.7)'; // Forest green
+    } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)) {
+        // Rain - cooler, bluer green
+        baseColor = 'rgba(0, 128, 0, 0.7)'; // Dark green
+    } else if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+        // Snow - very cool, almost blue-green
+        baseColor = 'rgba(0, 100, 0, 0.7)'; // Very dark green
+    } else if ([95, 96, 99].includes(weatherCode)) {
+        // Storm - dramatic, darker
+        baseColor = 'rgba(25, 25, 112, 0.7)'; // Midnight blue
+    } else {
+        // Default
+        baseColor = 'rgba(34, 139, 34, 0.7)';
+    }
+
+    landscape.style.background = `linear-gradient(to top, ${baseColor} 0%, ${baseColor.replace('0.7', '0.6')} 50%, ${baseColor.replace('0.7', '0.5')} 100%)`;
+}
+
+function createWeatherEffects(weatherCode) {
+    const effectsContainer = document.getElementById('weather-effects');
+    effectsContainer.innerHTML = '';
+
+    updateLandscapeColor(weatherCode);
+
+    if ([0, 1].includes(weatherCode)) {
+        // Sunny - add sun (left side)
+        const sun = document.createElement('div');
+        sun.className = 'sun';
+        sun.style.left = '10%';
+        effectsContainer.appendChild(sun);
+    } else if ([2, 3, 45, 48].includes(weatherCode)) {
+        // Cloudy/Fog - add clouds (left side)
+        for (let i = 0; i < 5; i++) {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            cloud.style.left = `${5 + Math.random() * 40}%`;
+            cloud.style.top = `${10 + i * 20 + Math.random() * 30}px`;
+            cloud.style.animationDelay = `${i * 4 + Math.random() * 3}s`;
+            effectsContainer.appendChild(cloud);
+        }
+    } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)) {
+        // Rain - add rain drops (random across screen)
+        for (let i = 0; i < 35; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDelay = `${Math.random() * 1.5}s`;
+            drop.style.animationDuration = `${0.6 + Math.random() * 0.3}s`;
+            effectsContainer.appendChild(drop);
+        }
+    } else if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+        // Snow - add snow flakes (random across screen)
+        for (let i = 0; i < 30; i++) {
+            const flake = document.createElement('div');
+            flake.className = 'snow-flake';
+            flake.style.left = `${Math.random() * 100}%`;
+            flake.style.animationDelay = `${Math.random() * 4}s`;
+            flake.style.animationDuration = `${2 + Math.random() * 2}s`;
+            effectsContainer.appendChild(flake);
+        }
+    }
+}
+
 function displayWeather(cityName, temp, icon, desc, weatherCode) {
     const weatherInfo = weatherCodeMap[weatherCode] || { bg: 'linear-gradient(135deg, #1f2937 0%, #0f172a 100%)' };
     document.body.classList.add('changing');
     setTimeout(() => {
         document.body.style.background = weatherInfo.bg;
         document.body.classList.remove('changing');
+        createWeatherEffects(weatherCode);
+        // Ocultar estrellas cuando hay clima
+        document.getElementById('stars').style.opacity = '0';
     }, 500);
     weatherResult.innerHTML = `
         <div class="mt-4 animate-fadeIn">
@@ -160,8 +235,24 @@ cityInput.addEventListener('keypress', (e) => {
     }
 });
 
+// Función para crear estrellas
+function createStars() {
+    const starsContainer = document.getElementById('stars');
+    starsContainer.innerHTML = '';
+
+    for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 70}%`; // Solo en la parte superior
+        star.style.animationDelay = `${Math.random() * 2}s`;
+        starsContainer.appendChild(star);
+    }
+}
+
 // Mensaje inicial
 window.onload = () => {
+    createStars();
     weatherResult.innerHTML = `
         <p class="text-gray-300 text-lg mb-2">Busca una ciudad para ver el clima.</p>
         <p class="text-base font-bold">¡Prueba con Madrid, Tokio o París!</p>

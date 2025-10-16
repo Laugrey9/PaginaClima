@@ -27,6 +27,143 @@
                 clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
             }
         }
+        #weather-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .sun {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 50%, transparent 70%);
+            border-radius: 50%;
+            animation: sunMove 20s linear infinite, sunGlow 3s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px #FFD700;
+        }
+        @keyframes sunMove {
+            0% { transform: translateX(-100px) translateY(50px) rotate(0deg); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(50px) rotate(360deg); }
+        }
+        .sun {
+            animation: sunMove 15s linear infinite, sunGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes sunGlow {
+            0% { box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; }
+            100% { box-shadow: 0 0 30px #FFA500, 0 0 60px #FFA500; }
+        }
+        .cloud {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            animation: cloudMove 30s linear infinite, cloudFloat 4s ease-in-out infinite alternate;
+        }
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+        .cloud::before {
+            width: 80px;
+            height: 80px;
+            top: -20px;
+            left: 20px;
+        }
+        .cloud::after {
+            width: 60px;
+            height: 60px;
+            top: -10px;
+            right: 20px;
+        }
+        @keyframes cloudMove {
+            0% { transform: translateX(-150px) scale(1); }
+            100% { transform: translateX(calc(100vw + 150px)) scale(1.1); }
+        }
+        .cloud {
+            animation: cloudMove 20s linear infinite, cloudFloat 3s ease-in-out infinite alternate;
+        }
+        @keyframes cloudFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+            animation: rainFall 1s linear infinite, rainWiggle 0.5s ease-in-out infinite alternate;
+            border-radius: 1px;
+        }
+        @keyframes rainFall {
+            0% { transform: translateY(-20px) scaleY(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) scaleY(0.8); opacity: 0; }
+        }
+        @keyframes rainWiggle {
+            0% { transform: translateX(0px); }
+            100% { transform: translateX(2px); }
+        }
+        .snow-flake {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+            border-radius: 50%;
+            animation: snowFall 5s linear infinite, snowTwinkle 2s ease-in-out infinite alternate;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        @keyframes snowFall {
+            0% { transform: translateY(-10px) rotate(0deg) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+        }
+        @keyframes snowTwinkle {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        #landscape {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 60%;
+            height: 250px;
+            background: linear-gradient(to top, rgba(34, 139, 34, 0.7) 0%, rgba(50, 205, 50, 0.7) 50%, rgba(144, 238, 144, 0.7) 100%);
+            z-index: -2;
+            clip-path: ellipse(100% 50% at 100% 100%);
+            transition: background 1s ease-in-out;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: linear-gradient(to bottom, #0f172a 0%, #1e293b 50%, #334155 100%);
+            transition: opacity 1s ease-in-out;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
         .glass-card {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(16px) saturate(180%);
@@ -59,6 +196,9 @@
     </style>
 </head>
 <body>
+    <div id="weather-effects"></div>
+    <div id="landscape"></div>
+    <div id="stars"></div>
     <div class="w-full max-w-md">
         <div
             id="weather-card"

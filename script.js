@@ -117,9 +117,11 @@ function displayWeather(cityName, temp, icon, desc, weatherCode) {
     weatherResult.innerHTML = `
         <div class="mt-4 animate-fadeIn">
             <div class="text-8xl mb-4 transition duration-500 transform hover:rotate-3">${icon}</div>
-            <p class="text-6xl font-bold mb-2">${temp}°C</p>
-            <p class="text-2xl font-semibold mb-4">${cityName}</p>
-            <p class="text-lg text-gray-300 mb-6">${desc}</p>
+            <div class="weather-text-bg">
+                <p class="text-6xl font-bold mb-2">${temp}°C</p>
+                <p class="text-2xl font-semibold mb-4">${cityName}</p>
+                <p class="text-lg text-gray-300 mb-6">${desc}</p>
+            </div>
         </div>
     `;
 }

@@ -41,13 +41,28 @@
             border: none !important;
             box-shadow: none !important;
         }
+        .weather-text-bg {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
     </style>
 </head>
 <body>
     <div class="w-full max-w-md">
         <div
             id="weather-card"
-            class="glass-card transparent-bg p-8 rounded-2xl text-white text-center transition-all duration-500 min-h-[300px]"
+            class="glass-card p-8 rounded-2xl text-white text-center transition-all duration-500 min-h-[300px]"
         >
             <h1 class="text-3xl font-extrabold mb-6">Clima Minimalista</h1>
 

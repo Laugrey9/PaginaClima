@@ -1,213 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clima Minimalista Borroso</title>
-    <!-- Carga de Tailwind CSS -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clima Minimalista Borroso - Open-Meteo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Configuración de fuente Inter y fondo oscuro */
         body {
             font-family: 'Inter', sans-serif;
-            /* Fondo degradado oscuro para que el efecto borroso sea visible */
             background: linear-gradient(135deg, #1f2937 0%, #0f172a 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem; /* Padding para móviles */
+            padding: 1.5rem;
         }
-
-        /* Clase para el efecto Glassmorphism */
         .glass-card {
-            background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco semitransparente */
-            backdrop-filter: blur(16px) saturate(180%); /* El toque borroso y de saturación */
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Sombra para profundidad */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
 </head>
 <body>
-
     <div class="w-full max-w-md">
-        <!-- Tarjeta Principal del Clima con Efecto Borroso -->
-        <div id="weather-card" class="glass-card p-8 rounded-2xl text-white text-center transition-all duration-500 min-h-[300px]">
+        <div
+            id="weather-card"
+            class="glass-card p-8 rounded-2xl text-white text-center transition-all duration-500 min-h-[300px]"
+        >
             <h1 class="text-3xl font-extrabold mb-6">Clima Minimalista</h1>
 
-            <!-- Campo de Búsqueda -->
             <div class="flex space-x-2 mb-8">
-                <input type="text" id="city-input" placeholder="Introduce una ciudad..."
-                       class="flex-grow p-3 rounded-xl bg-white/20 border-white/30 border text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400/50 transition duration-300 shadow-inner"
-                       aria-label="Introduce el nombre de la ciudad">
-                <button id="search-button"
-                        class="p-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-semibold shadow-lg shadow-sky-500/50 transition duration-300 ease-in-out transform hover:scale-105">
+                <input
+                    type="text"
+                    id="city-input"
+                    placeholder="Introduce una ciudad..."
+                    class="flex-grow p-3 rounded-xl bg-white/20 border-white/30 border text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400/50 transition duration-300 shadow-inner"
+                    aria-label="Introduce el nombre de la ciudad"
+                />
+                <button
+                    id="search-button"
+                    class="p-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-semibold shadow-lg shadow-sky-500/50 transition duration-300 ease-in-out transform hover:scale-105"
+                >
                     Buscar
                 </button>
             </div>
 
-            <!-- Contenido del Clima (Inicialmente vacío o con mensaje) -->
             <div id="weather-result">
-                <p class="text-gray-300 text-lg">Busca una ciudad para ver el clima.</p>
+                <p class="text-gray-300 text-lg">
+                    Busca una ciudad para ver el clima.
+                </p>
                 <p class="text-xs mt-2 text-gray-400">
-                    (Se usarán datos simulados, ya que no puedo acceder a APIs de clima real.)
+                    (Usando datos reales desde Open-Meteo.)
                 </p>
             </div>
 
-            <!-- Indicador de Carga (Oculto) -->
             <div id="loading-spinner" class="hidden mt-8">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+                <div
+                    class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"
+                ></div>
                 <p class="mt-2 text-sm text-gray-300">Cargando...</p>
             </div>
         </div>
 
-        <!-- Mensaje de Error (Oculto) -->
-        <div id="error-message" class="hidden mt-4 p-4 rounded-xl bg-red-500/20 text-red-300 text-sm border border-red-400/50">
+        <div
+            id="error-message"
+            class="hidden mt-4 p-4 rounded-xl bg-red-500/20 text-red-300 text-sm border border-red-400/50"
+        >
             Hubo un error al obtener el clima. Inténtalo de nuevo.
         </div>
     </div>
 
-    <script>
-        const cityInput = document.getElementById('city-input');
-        const searchButton = document.getElementById('search-button');
-        const weatherResult = document.getElementById('weather-result');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const errorMessage = document.getElementById('error-message');
-
-        // Diccionario simple para mapear el estado del clima a un emoji
-        const weatherIcons = {
-            'Soleado': '☀️',
-            'Nublado': '☁️',
-            'Lluvioso': '🌧️',
-            'Tormenta': '⛈️',
-            'Nieve': '❄️',
-            'Niebla': '🌫️',
-            'Parcialmente Nublado': '⛅',
-        };
-
-        // Datos de clima simulados para las ciudades
-        const mockWeatherData = {
-            "madrid": { temp: 24, desc: "Parcialmente Nublado", wind: 15, humidity: 60 },
-            "tokio": { temp: 18, desc: "Lluvioso", wind: 8, humidity: 85 },
-            "nueva york": { temp: 12, desc: "Nublado", wind: 22, humidity: 70 },
-            "paris": { temp: 20, desc: "Soleado", wind: 10, humidity: 55 },
-            "ciudad de mexico": { temp: 27, desc: "Soleado", wind: 5, humidity: 45 },
-            "default": { temp: 25, desc: "Nublado", wind: 12, humidity: 75 },
-        };
-
-
-        /**
-         * Simula una llamada a una API de clima externa.
-         * En una aplicación real, aquí usarías `fetch` para llamar a un servicio como OpenWeatherMap.
-         * @param {string} city - La ciudad a buscar.
-         */
-        async function fetchWeather(city) {
-            // Ocultar mensajes previos
-            weatherResult.innerHTML = '';
-            errorMessage.classList.add('hidden');
-            loadingSpinner.classList.remove('hidden');
-
-            // Simulación de delay de API
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            loadingSpinner.classList.add('hidden');
-
-            const normalizedCity = city.trim().toLowerCase();
-            const data = mockWeatherData[normalizedCity] || null;
-
-            if (data) {
-                return {
-                    city: city.trim(),
-                    ...data
-                };
-            } else {
-                // Simula el error si la ciudad no está en nuestra lista de mocks
-                throw new Error(`Ciudad "${city}" no encontrada.`);
-            }
-        }
-
-        /**
-         * Muestra los resultados del clima en el contenedor.
-         * @param {object} data - Datos del clima.
-         */
-        function displayWeather(data) {
-            const icon = weatherIcons[data.desc] || '❓';
-            
-            weatherResult.innerHTML = `
-                <div class="mt-4 animate-fadeIn">
-                    <div class="text-8xl mb-4 transition duration-500 transform hover:rotate-3">
-                        ${icon}
-                    </div>
-                    <p class="text-6xl font-bold mb-2">${data.temp}°C</p>
-                    <p class="text-2xl font-semibold mb-4">${data.city}</p>
-                    <p class="text-lg text-gray-300 mb-6">${data.desc}</p>
-                    
-                    <!-- Detalles Adicionales -->
-                    <div class="flex justify-center space-x-6 text-sm">
-                        <div class="p-3 glass-card rounded-lg flex flex-col items-center">
-                            <span class="text-xl">💨</span>
-                            <span>Viento: ${data.wind} km/h</span>
-                        </div>
-                        <div class="p-3 glass-card rounded-lg flex flex-col items-center">
-                            <span class="text-xl">💧</span>
-                            <span>Humedad: ${data.humidity}%</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        /**
-         * Manejador del evento de búsqueda.
-         */
-        async function handleSearch() {
-            const city = cityInput.value;
-            if (!city) {
-                errorMessage.textContent = 'Por favor, introduce el nombre de una ciudad.';
-                errorMessage.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                const weatherData = await fetchWeather(city);
-                displayWeather(weatherData);
-            } catch (error) {
-                console.error(error);
-                weatherResult.innerHTML = ''; // Limpiar resultados
-                errorMessage.textContent = error.message;
-                errorMessage.classList.remove('hidden');
-            }
-        }
-
-        // Asignar eventos
-        searchButton.addEventListener('click', handleSearch);
-        cityInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
-
-        // Inicialización: Cargar clima por defecto al iniciar (simulado)
-        window.onload = () => {
-             // Iniciar con un mensaje para invitar a la búsqueda
-             weatherResult.innerHTML = `
-                <p class="text-gray-300 text-lg mb-2">Busca una ciudad para ver el clima.</p>
-                <p class="text-base font-bold">¡Prueba con Madrid, Tokio o París!</p>
-             `;
-        };
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
